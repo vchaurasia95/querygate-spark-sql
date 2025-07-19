@@ -27,8 +27,6 @@ logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 
-
-
 APP_NAME = "sql_validator_app"
 USER_ID = "12345"
 SESSION_ID = "123344"
@@ -40,25 +38,22 @@ model_validator_agent = LlmAgent(
     instruction=model_validator.MODEL_VALIDATOR_PROMPT,
     description="Strict Spark SQL validator. Returns only structured JSON output. Does not explain, repair, or interpret user queries.",
     output_key="model_agent_result",
-    #tools= [validate_sql_syntax],  # Save result to state
     generate_content_config = validation_generation_config,
-    # include_contents="none",
 )
 
-tool_validator_agent = LlmAgent(
+error_interpreter_agent = LlmAgent(
     name="ErrorInterpreterAgent",
     model="gemini-2.5-flash",
     instruction= error_interpreter.ERROR_INTERPRETER_PROMPT,
     description="Strict error interpreter for SQL syntax errors. Analyzes provided SQL query and error message, returning only structured JSON output with clear syntax error explanation.",
-    # include_contents="none",
 )
 
 
 coordinator_agent = CoordinatorAgent(
     name="CoordinatorAgent",
     model_validator_agent=model_validator_agent,
-    tool_validator_agent=tool_validator_agent,
-    sub_agents=[model_validator_agent, tool_validator_agent],
+    error_intepreter_agent=error_interpreter_agent,
+    sub_agents=[model_validator_agent, error_interpreter_agent],
 )
 
 # --- Setup Runner and Session ---

@@ -17,7 +17,7 @@ class CoordinatorAgent(BaseAgent):
     # # --- Field Declarations for Pydantic ---
     # # Declare the agents passed during initialization as class attributes with type hints
     model_validator_agent: LlmAgent = Field(...)
-    tool_validator_agent: LlmAgent = Field(...)
+    error_intepreter_agent: LlmAgent = Field(...)
 
     # model_config allows setting Pydantic configurations if needed, e.g., arbitrary_types_allowed
     model_config = {"arbitrary_types_allowed": True}
@@ -75,7 +75,7 @@ class CoordinatorAgent(BaseAgent):
                 partial=True
             )
             print("State after error:", ctx.session.state)
-            async for event in self.tool_validator_agent.run_async(ctx):
+            async for event in self.error_intepreter_agent.run_async(ctx):
                 yield event
 
          # After tool_validator_agent finishes, clear its specific state if needed
