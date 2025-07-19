@@ -1,0 +1,4 @@
+.env
+# Python byte‑code cache
+__pycache__/
+*.py[cod]
