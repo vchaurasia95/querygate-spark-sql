@@ -35,7 +35,7 @@ class CoordinatorAgent(BaseAgent):
         sql_query = ctx.user_content.parts[0].text
         print(sql_query)
         if not sql_query:
-            yield Event.text("❌ No SQL input found in session state under key 'input'.")
+            yield Event.text("No SQL input found in session state under key 'input'.")
             return
         
         print(sql_query)
@@ -57,7 +57,7 @@ class CoordinatorAgent(BaseAgent):
                 author=self.name,
                 content=types.Content(
                     role="assistant",
-                    parts=[types.Part(text="✅ SQL syntax is valid according to tool. Proceeding with model validation...")]
+                    parts=[types.Part(text="SQL syntax is valid according to tool. Proceeding with model validation...")]
                 ),
                 partial=True
             ) 
@@ -70,7 +70,7 @@ class CoordinatorAgent(BaseAgent):
                 author=self.name,
                 content=types.Content(
                     role="assistant",
-                    parts=[types.Part(text="❌ SQL syntax is invalid according to tool. Proceeding with error interpretion")]
+                    parts=[types.Part(text="SQL syntax is invalid according to tool. Proceeding with error interpretion")]
                 ),
                 partial=True
             )
