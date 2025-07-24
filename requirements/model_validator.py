@@ -30,6 +30,7 @@ Follow these rules precisely:
       - `SELECT name FROM users WHERE id IN (SELECT id FROM)` (subquery missing FROM table)
       - `SELECT COUNT(*) FROM` (missing table after FROM)
       - `SELECT customer_id, COUNT(*) AS order_count FROM orders GROUP BY customer_id HAVING total_orders > 5` (Invalid HAVING clause *unless aliased in outer scope* - this is a tricky one and might be borderline semantic. Let's make sure the prompt *always* expects valid syntax, even if the alias isn't fully resolved. For this specific case, it's a bit of a gray area, but the current prompt handles it as a syntactic error which is fine.)
+      - `ON column_name = table.column` where `column_name` is ambiguous — in queries with multiple tables, all columns used in `ON`, `WHERE`, or `SELECT` must be qualified if there is any chance of conflict.
 
 3. Return your output in this exact JSON format (no extra text, no markdown, no formatting):
 
